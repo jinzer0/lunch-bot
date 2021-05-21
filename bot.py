@@ -151,7 +151,7 @@ def send_meal(message):
     elif len(meal) == 2:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
-        elif datetime.datetime.now().hour == 12:
+        elif datetime.datetime.now().hour == 3:
             msg = meal[1]
 
         if msg == meal[0]:
@@ -184,7 +184,7 @@ dinner = s.Scheduler()
 
 def alarm(message):
     breakfast.every().day.at("22:00").do(send_meal, message)
-    lunch.every().day.at("12:16").do(send_meal, message)
+    lunch.every().day.at("03:31").do(send_meal, message)
     dinner.every().day.at("08:25").do(send_meal, message)
 
     while True:
