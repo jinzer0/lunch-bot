@@ -147,10 +147,9 @@ def send_meal(message):
     if len(meal) == 1:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
-        text = "*_조식_*\n" + msg
-        bot.send_message(message.chat.id, text)
-        else:
-            return
+            text = "*_조식_*\n" + msg
+            bot.send_message(message.chat.id, text)
+        return
 
     elif len(meal) == 2:
         if datetime.datetime.now().hour == 22:
@@ -163,7 +162,6 @@ def send_meal(message):
             bot.send_message(message.chat.id, text)
         else:
             return
-
     elif len(meal) == 3:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
