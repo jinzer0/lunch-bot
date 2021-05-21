@@ -60,26 +60,26 @@ def set_meal(meal):
     if meal["mealServiceDietInfo"][0]["head"][0]["list_total_count"] == 1:
         morning = meal["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
                                                                                                               "\.").replace(
-            "*", "\*")
+            "*", "\*").replace("-", "\-")
         return morning
     elif meal["mealServiceDietInfo"][0]["head"][0]["list_total_count"] == 2:
         morning = meal["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
                                                                                                               "\.").replace(
-            "*", "\*")
-        noon = meal["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
+            "*", "\*").replace("-", "\-")
+        noon = meal["mealServiceDietInfo"][1]["row"][1]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
                                                                                                            "\.").replace(
-            "*", "\*")
+            "*", "\*").replace("-", "\-")
         return morning, noon
     elif meal["mealServiceDietInfo"][0]["head"][0]["list_total_count"] == 3:
         morning = meal["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
                                                                                                               "\.").replace(
-            "*", "\*")
-        noon = meal["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
+            "*", "\*").replace("-", "\-")
+        noon = meal["mealServiceDietInfo"][1]["row"][1]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
                                                                                                            "\.").replace(
-            "*", "\*")
-        evening = meal["mealServiceDietInfo"][1]["row"][0]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
+            "*", "\*").replace("-", "\-")
+        evening = meal["mealServiceDietInfo"][1]["row"][2]["DDISH_NM"].strip().replace("<br/>", "\n").replace(".",
                                                                                                               "\.").replace(
-            "*", "\*")
+            "*", "\*").replace("-", "\-")
         return morning, noon, evening
     else:
         return
@@ -139,42 +139,47 @@ def get_info():
 
 def send_meal(message):
     meal = get_info()
+    print(meal)
 
     if meal == None:
         bot.send_message(message.chat.id, "오늘은 급식이 없습니다\.")
+
     if len(meal) == 1:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
         text = "*_조식_*\n" + msg
         bot.send_message(message.chat.id, text)
+        else:
+            return
 
     elif len(meal) == 2:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
-        elif datetime.datetime.now().hour == 3:
-            msg = meal[1]
-
-        if msg == meal[0]:
             text = "*_조식_*\n" + msg
-        elif msg == meal[1]:
+            bot.send_message(message.chat.id, text)
+        elif datetime.datetime.now().hour == 13:
+            msg = meal[1]
             text = "*_중식_*\n" + msg
-        bot.send_message(message.chat.id, text)
+            bot.send_message(message.chat.id, text)
+        else:
+            return
 
     elif len(meal) == 3:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
+            text = "*_조식_*\n" + msg
+            bot.send_message(message.chat.id, text)
+
         elif datetime.datetime.now().hour == 11:
             msg = meal[1]
+            text = "*_중식_*\n" + msg
+            bot.send_message(message.chat.id, text)
+
         elif datetime.datetime.now().hour == 8:
             msg = meal[2]
-
-        if msg == meal[0]:
-            text = "*_조식_*\n" + msg
-        elif msg == meal[1]:
-            text = "*_중식_*\n" + msg
-        elif msg == meal[2]:
             text = "*_석식_*\n" + msg
-        bot.send_message(message.chat.id, text)
+            bot.send_message(message.chat.id, text)
+
 
 
 breakfast = s.Scheduler()
@@ -184,7 +189,7 @@ dinner = s.Scheduler()
 
 def alarm(message):
     breakfast.every().day.at("22:00").do(send_meal, message)
-    lunch.every().day.at("03:31").do(send_meal, message)
+    lunch.every().day.at("02:10").do(send_meal, message)
     dinner.every().day.at("08:25").do(send_meal, message)
 
     while True:
