@@ -156,7 +156,7 @@ def send_meal(message):
             msg = meal[0]
             text = "*_조식_*\n" + msg
             bot.send_message(message.chat.id, text)
-        elif datetime.datetime.now().hour == 13:
+        elif datetime.datetime.now().hour == 2:
             msg = meal[1]
             text = "*_중식_*\n" + msg
             bot.send_message(message.chat.id, text)
@@ -168,7 +168,7 @@ def send_meal(message):
             text = "*_조식_*\n" + msg
             bot.send_message(message.chat.id, text)
 
-        elif datetime.datetime.now().hour == 11:
+        elif datetime.datetime.now().hour == 2:
             msg = meal[1]
             text = "*_중식_*\n" + msg
             bot.send_message(message.chat.id, text)
