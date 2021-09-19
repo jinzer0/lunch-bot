@@ -1,4 +1,7 @@
-import telebot
+from pyrogram import Client
+from pyrogram import filters
+from pyrogram.types import Message
+from config import Messages
 import requests as r
 import logging
 import urllib.parse
@@ -6,7 +9,10 @@ import schedule as s
 import csv
 import datetime
 import time
+from pymongo import MongoClient
 
+api_id = 8515288
+api_hash = "da9c7ef954fc0212589870cb079bdd21"
 token = "1890496399:AAGVRWGm3q0FnysKMBSzr9AvwUI4OguwPfM"
 
 school_code = {}
@@ -18,9 +24,11 @@ with open("source/highschool.csv") as file:
 
     print("School code is prepared...")
 
-bot = telebot.TeleBot(token, parse_mode="MarkdownV2")
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
+mongo = MongoClient("localhost", 27017)
+db = mongo["student"]
+col = db.members
 
 def user_info(message):
     epochtime = message.date
@@ -179,7 +187,6 @@ def send_meal(message):
             bot.send_message(message.chat.id, text)
 
 
-
 breakfast = s.Scheduler()
 lunch = s.Scheduler()
 dinner = s.Scheduler()
@@ -213,31 +220,30 @@ def set_school(message):
     bot.send_message(message.chat.id, "알림을 켜기 위해 *_/begin_*을 입력하세요\.")
 
 
-@bot.message_handler(commands=["start"])
-def start(message):
-    user_info(message)
-    bot.send_message(message.chat.id, "급식을 알려주는 봇입니다\. 학교 설정을 위해 *_/setting_*을 입력하세요\.")
 
+app = Client("lunch", api_id, api_hash, parse_mode="markdown")
 
-@bot.message_handler(commands=["setting"])
-def setting_school(message):
-    user_info(message)
-    bot.send_message(message.chat.id, "급식 정보를 받으려는 학교를 입력하세요\. 예\) 대한초등학교, 민국중학교")
-    bot.register_next_step_handler(message, set_school)
+@app.on_message(filters=filters.command(["start"]))
+def start(client: Client, message: Message):
+    app.send_message(chat_id=message.chat.id, text=Messages.start_msg)
 
+@app.on_message(filters=filters.command(["help"]))
+def help(client: Client, message: Message):
+    app.send_message(chat_id=message.chat.id, text=Messages.help_msg)
 
-@bot.message_handler(commands=["begin"])
-def begin_alert(message):
-    user_info(message)
-    bot.send_message(message.chat.id, "알림이 켜졌습니다\. 알림을 중지하려면 *_/halt_*를 입력하세요\.")
+@app.on_message(filters=filters.command(["set"]))
+def start(client: Client, message: Message):
+    app.send_message(chat_id=message.chat.id, text=Messages.set_msg)
+
+@app.on_message(filters=filters.command(["launch"]))
+def launch(client: Client, message: Message):
     alarm(message)
+    app.send_message(chat_id=message.chat.id, text=Messages.launch_msg)
 
-
-@bot.message_handler(commands=["halt"])
-def stop_alert(message):
-    user_info(message)
-    bot.send_message(message.chat.id, "알림이 중지되었습니다\.")
+@app.on_message(filters=filters.command(["stop"]))
+def stop(client: Client, message: Message):
     halt_schedule()
+    app.send_message(chat_id=message.chat.id, text=Messages.stop_msg)
 
 
-bot.polling()
+app.run()
