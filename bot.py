@@ -9,40 +9,38 @@ import schedule as s
 import csv
 import datetime
 import time
-from pymongo import MongoClient
+import sqlite3
 
 api_id = 8515288
 api_hash = "da9c7ef954fc0212589870cb079bdd21"
 token = "1890496399:AAGVRWGm3q0FnysKMBSzr9AvwUI4OguwPfM"
 
+logging.basicConfig(filename="handle.log", format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                    level=logging.INFO)
+
 school_code = {}
-with open("source/highschool.csv") as file:
+with open("highschool.csv") as file:
     lines = csv.reader(file)
     lines.__next__()
     for line in lines:
         school_code[line[2]] = [line[0], line[3]]
 
     print("School code is prepared...")
+    logging.info("School code is prepared!")
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+app = Client("lunch", api_id, api_hash, parse_mode="markdown")
 
-mongo = MongoClient("localhost", 27017)
-db = mongo["student"]
-col = db.members
 
-def user_info(message):
+def user_info(message: Message):
     epochtime = message.date
     user_id = message.chat.id
     message_id = message.message_id
-    username_first = message.chat.first_name
-    username_last = message.chat.last_name
     user_message = message.text
 
     realtime = time.localtime(epochtime + 32400)
 
     text = f"""
 --------------------------------------------
-USER : {username_first} {username_last}
 ID : {user_id}
 MESSAGE : {user_message}
 ID_MESSAGE : {message_id}
@@ -61,7 +59,7 @@ def set_code(school):
     sch_number = info[0]
     edu_number = edu_code[info[1]]
 
-    return sch_number, edu_number
+    return [sch_number, edu_number]
 
 
 def set_meal(meal):
@@ -93,7 +91,7 @@ def set_meal(meal):
         return
 
 
-def get_info():
+def get_info():  # get information from NEIS Service
     target = "https://open.neis.go.kr/hub/mealServiceDietInfo?"
     apikey = "3157754f46dc4aafbc8f52dc0f257b77"
 
@@ -113,6 +111,10 @@ def get_info():
     year = datetime.datetime.now(tz=KST).year
     mon = datetime.datetime.now(tz=KST).month
     day = datetime.datetime.now(tz=KST).day
+    week = datetime.datetime.now().weekday()
+
+    if week in [5, 6]:
+        return None
 
     if mon < 10:
         today = str(year) + "0" + str(mon)
@@ -140,8 +142,6 @@ def get_info():
     result = res.json()
     output = set_meal(result)
 
-    print("Got information...\n\n")
-
     return output
 
 
@@ -150,41 +150,41 @@ def send_meal(message):
     print(meal)
 
     if meal == None:
-        bot.send_message(message.chat.id, "오늘은 급식이 없습니다\.")
+        app.send_message(message.chat.id, "오늘은 급식이 없습니다\.")
 
     if len(meal) == 1:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
             text = "*_조식_*\n" + msg
-            bot.send_message(message.chat.id, text)
+            app.send_message(message.chat.id, text)
         return
 
     elif len(meal) == 2:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
             text = "*_조식_*\n" + msg
-            bot.send_message(message.chat.id, text)
+            app.send_message(message.chat.id, text)
         elif datetime.datetime.now().hour == 2:
             msg = meal[1]
             text = "*_중식_*\n" + msg
-            bot.send_message(message.chat.id, text)
+            app.send_message(message.chat.id, text)
         else:
             return
     elif len(meal) == 3:
         if datetime.datetime.now().hour == 22:
             msg = meal[0]
             text = "*_조식_*\n" + msg
-            bot.send_message(message.chat.id, text)
+            app.send_message(message.chat.id, text)
 
         elif datetime.datetime.now().hour == 2:
             msg = meal[1]
             text = "*_중식_*\n" + msg
-            bot.send_message(message.chat.id, text)
+            app.send_message(message.chat.id, text)
 
         elif datetime.datetime.now().hour == 8:
             msg = meal[2]
             text = "*_석식_*\n" + msg
-            bot.send_message(message.chat.id, text)
+            app.send_message(message.chat.id, text)
 
 
 breakfast = s.Scheduler()
@@ -210,35 +210,44 @@ def halt_schedule():
     dinner.clear()
 
 
-def set_school(message):
+def set_school(message: Message):
     user_info(message)
-    msg = message.text
-    with open("setup.txt", "w") as sch:
-        sch.write(msg)
+    school = message.text.split()[1]
+    user_id = message.from_user.id
+    code = set_code(school)
+    student = {
+        "id": user_id,
+        "school_code": code[0],
+        "edu_code": code[1],
+        "school": school
+    }
 
-    bot.send_message(message.chat.id, "학교 설정이 완료되었습니다\.")
-    bot.send_message(message.chat.id, "알림을 켜기 위해 *_/begin_*을 입력하세요\.")
+    app.send_message(message.chat.id, "학교 설정이 완료되었노라...")
 
-
-
-app = Client("lunch", api_id, api_hash, parse_mode="markdown")
 
 @app.on_message(filters=filters.command(["start"]))
 def start(client: Client, message: Message):
     app.send_message(chat_id=message.chat.id, text=Messages.start_msg)
 
+
 @app.on_message(filters=filters.command(["help"]))
 def help(client: Client, message: Message):
     app.send_message(chat_id=message.chat.id, text=Messages.help_msg)
 
-@app.on_message(filters=filters.command(["set"]))
+
+@app.on_message(filters=filters.regex("/set"))
 def start(client: Client, message: Message):
-    app.send_message(chat_id=message.chat.id, text=Messages.set_msg)
+    if message.text == "/set":
+        app.send_message(chat_id=message.chat.id, text=Messages.set_msg)
+    else:
+        set_school(message)
+
 
 @app.on_message(filters=filters.command(["launch"]))
 def launch(client: Client, message: Message):
     alarm(message)
     app.send_message(chat_id=message.chat.id, text=Messages.launch_msg)
+
 
 @app.on_message(filters=filters.command(["stop"]))
 def stop(client: Client, message: Message):

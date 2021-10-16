@@ -27,7 +27,7 @@ numbers = [kangwon, gyeonggi, geongsangnam, geongsangbuk, gwangju, daegu, daejeo
            jeollanam, jeollabuk, jeju, chungcheongnam, chungcheongbuk]
 
 school_code = {}
-with open("source/highschool.csv") as file:
+with open("highschool.csv") as file:
     lines = csv.reader(file)
     lines.__next__()
     for line in lines:
@@ -96,6 +96,10 @@ def get_info():
     year = datetime.datetime.now(tz=KST).year
     mon = datetime.datetime.now(tz=KST).month
     day = datetime.datetime.now(tz=KST).day
+    week = datetime.datetime.now(tz=KST).weekday()
+
+    if week in [5, 6]:
+        return None
 
     if mon < 10:
         today = str(year) + "0" + str(mon)
@@ -119,6 +123,7 @@ def get_info():
     }
 
     url = target + urllib.parse.urlencode(parameter, doseq=True)
+    print(url)
     res = r.get(url)
     result = res.json()
     print(result)
@@ -180,8 +185,9 @@ def alarm():
         time.sleep(1)
 
 
+if get_info() is None:
+    print("None")
 
-get_info()
 
 # sample = '칼슘찹쌀밥*<br/>쇠고기무국*13.16.<br/>청경채나물*<br/>소시지볶음*2.5.6.10.12.13.15.16.18.<br/>새우볼꼬치*1.5.6.9.10.13.16.18.<br/>데리야끼떡갈비*2.5.6.10.13.15.16.18.<br/>깍두기*9.13.<br/>쿨피스*13.<br/>바나나*13.'
 #
