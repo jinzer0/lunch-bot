@@ -1,4 +1,5 @@
 import csv
+import os
 import sqlite3
 import datetime
 import time
@@ -27,7 +28,7 @@ from errors import WeekendError
 # print(cur.fetchone())
 # db.commit()
 # db.close()
-
+os.chdir("/Users/kjy/Desktop/Codes/python/lunch-bot")
 
 # print(type(result[0]))
 # print(dict(result[0]))
@@ -139,3 +140,18 @@ def alarm(meal_code: int):
         meal_tag = result[2]
         # app.send_message(chat_id=int(user_id), text=Messages.alarm_msg.format(meal_tag, meal, calorie))
         time.sleep(0.1)
+
+school_db = sqlite3.connect("highschool.db")
+cur = school_db.cursor()
+
+sql = "SELECT * FROM user"
+cur.execute(sql)
+result_user = cur.fetchall()
+user_count = len(result_user)
+
+sql = "SELECT * FROM user WHERE alarm = 'true'"
+cur.execute(sql)
+result_alarm = cur.fetchall()
+alarm_count = len(result_alarm)
+
+print(user_count, alarm_count)

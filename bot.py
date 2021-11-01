@@ -51,8 +51,8 @@ def search_school_fullname(school_fullname):
 def insert_user(message: Message, result: tuple):
     school_db = sqlite3.connect("highschool.db")
     cur = school_db.cursor()
-    sql = "INSERT INTO user(user_id, username, school_fullname, school_code, edu_tag) values (?, ?, ?, ?, ?)"
-    cur.execute(sql, (message.from_user.id, message.from_user.username, result[2], result[1], result[5]))
+    sql = "INSERT INTO user(user_id, username, school_fullname, school_code, edu_tag, alarm) values (?, ?, ?, ?, ?, ?)"
+    cur.execute(sql, (message.from_user.id, message.from_user.username, result[2], result[1], result[5], 'true'))
     school_db.commit()
     school_db.close()
 
