@@ -58,6 +58,9 @@ def insert_user(message: Message, result: tuple):
 
 
 def fetch_info():  # get information from NEIS Service
+    school_db = sqlite3.connect("highschool.db")
+    cur = school_db.cursor()
+
     target = "https://open.neis.go.kr/hub/mealServiceDietInfo?"
     apikey = "3157754f46dc4aafbc8f52dc0f257b77"
 
@@ -87,8 +90,14 @@ def fetch_info():  # get information from NEIS Service
     school = 7010170
     education = "B10"
 
-    school_db = sqlite3.connect("highschool.db")
-    cur = school_db.cursor()
+    sql = "DROP TABLE cafeteria"
+    cur.execute(sql)
+    school_db.commit()
+
+    sql = "CREATE TABLE cafeteria (school_code INTEGER, meal TEXT, calorie TEXT, meal_code INTEGER, meal_tag TEXT)"
+    cur.execute(sql)
+    school_db.commit()
+
     sql = "SELECT school_code, edu_tag FROM highschool"
     cur.execute(sql)
     result = cur.fetchall()
