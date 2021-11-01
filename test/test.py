@@ -27,7 +27,7 @@ numbers = [kangwon, gyeonggi, geongsangnam, geongsangbuk, gwangju, daegu, daejeo
            jeollanam, jeollabuk, jeju, chungcheongnam, chungcheongbuk]
 
 school_code = {}
-with open("highschool.csv") as file:
+with open("../highschool.csv") as file:
     lines = csv.reader(file)
     lines.__next__()
     for line in lines:
@@ -80,7 +80,7 @@ def get_info():
     target = "https://open.neis.go.kr/hub/mealServiceDietInfo?"
     apikey = "3157754f46dc4aafbc8f52dc0f257b77"
 
-    with open("setup.txt", "r") as setup:
+    with open("../setup.txt", "r") as setup:
         name = setup.readline()
 
     numbers = set_code(name)

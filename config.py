@@ -1,32 +1,36 @@
+from pyrogram import emoji
 class Messages:
     START_MSG = "**Hi there {}.**\n__I'm Google Drive Uploader Bot.You can use me to upload any file / video to Google Drive from direct link or Telegram Files.__\n__You can know more from /help.__"
     start_msg = "**안녕한가 👨🏼‍🎓학생들이여... {}.**\n지정된 시간에 **급식**을 알려주는 급식봇이라고 한다...\n/help 명령어로 사용 방법을 배워보거라..."
-    help_msg = """/start - ✅ 쓸모 없는 명령어\n
-/help - ℹ️ 현재 이 메세지 보기\n\n
-/set - ⚙️ 급식 정보를 받으려는 학교 설정 예) /set 한국중학교\n\n
-/launch - ⏰ 급식 알림 시작\n\n
-/stop - 🛑 급식 알림 중지"""
-    set_msg = "⚙️ 급식 정보를 받으려는 **학교**를 설정하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예)/set 대한고등학교,/set 민국중학교**"
-    launch_msg = "⏰ 알림이 켜졌노라...\n앞으로 조/중/석식(있는 경우만)을 알려주겠노라...\n중지는 **/halt**를 입력하거라..."
-    stop_msg ="🛑 알림이 중지되었노라...\n다시 켠다면 **/launch**를 입력하거라"
-
-    HELP_MSG = [
-        ".",
-        "**Google Drive Uploader**\n__I can upload files from direct link or Telegram Files to your Google Drive. All i need is to authenticate me to your Google Drive Account and send a direct download link or Telegram File.__\n\nI have more features... ! Wanna know about it ? Just walkthrough this tutorial and read the messages carefully.",
-
-        f"**Authenticating Google Drive**\n__Send the /{BotCommands.Authorize[0]} commmand and you will receive a URL, visit URL and follow the steps and send the received code here. Use /{BotCommands.Revoke[0]} to revoke your currently logged Google Drive Account.__\n\n**Note: I will not listen to any command or message (except /{BotCommands.Authorize[0]} command) until you authorize me.\nSo, Authorization is mandatory !**",
-
-        f"**Direct Links**\n__Send me a direct download link for a file and i will download it on my server and Upload it to your Google Drive Account. You can rename files before uploading to GDrive Account. Just send me the URL and new filename separated by ' | '.__\n\n**__Examples:__**\n```https://example.com/AFileWithDirectDownloadLink.mkv | New FileName.mkv```\n\n**Telegram Files**\n__To Upload telegram files in your Google drive Account just send me the file and i will download and upload it to your Google Drive Account. Note: Telegram Files Downloading are slow. it may take longer for big files.__\n\n**YouTube-DL Support**\n__Download files via youtube-dl.\nUse /{BotCommands.YtDl[0]} (YouTube Link/YouTube-DL Supported site link)__",
-
-        f"**Custom Folder for Upload**\n__Want to upload in custom folder or in__ **TeamDrive** __ ?\nUse /{BotCommands.SetFolder[0]} (Folder URL) to set custom upload folder.\nAll the files are uploaded in the custom folder you provide.__",
-
-        f"**Delete Google Drive Files**\n__Delete google drive files. Use /{BotCommands.Delete[0]} (File/Folder URL) to delete file or reply /{BotCommands.Delete[0]} to bot message.\nYou can also empty trash files use /{BotCommands.EmptyTrash[0]}\nNote: Files are deleted permanently. This process cannot be undone.\n\n**Copy Google Drive Files**\n__Yes, Clone or Copy Google Drive Files.\n__Use /{BotCommands.Clone[0]} (File id / Folder id or URL) to copy Google Drive Files in your Google Drive Account.__",
-
-        "**Rules & Precautions**\n__1. Don't copy BIG Google Drive Files/Folders. It may hang the bot and your files maybe damaged.\n2. Send One request at a time unless bot will stop all processes.\n3. Don't send slow links @transload it first.\n4. Don't misuse, overload or abuse this free service.__",
-
-        # Dont remove this ↓ if you respect developer.
-        "**Developed by @viperadnan**"
-    ]
+    help_msg = """/start - ✅ **쓸모 없는 명령어**\n
+/help - ℹ️ **현재 이 메세지 보기**\n
+/set - ⚙️ **급식 정보를 받으려는 학교 설정** 예) /set 한국중학교\n
+/launch - ⏰ **급식 알림 시작**\n
+/stop - ⛔ **급식 알림 중지**"""
+    set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 설정하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예)/set 대한고등학교,/set 민국중학교**"
+    launch_msg = "⏰ **알림이 켜졌노라..**.\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n알람 중지는 **/stop**를 입력하거라~"
+    stop_msg ="⛔ **알림이 중지되었노라...**\n알람을 다시 켠다면 **/launch**를 입력하거라~"
+    alarm_msg = "🍽️🥣 **오늘 {}** 🍽️🥣\n-----\n**{}**\n-----\n✅ **칼로리 :** ```{}```"
+    alarm_error_msg = f"{emoji.CROSS_MARK_BUTTON} **오늘은 급식이 없습니다!**"
+    delete_msg = f"{emoji.WARNING} **정말로 유저 정보를 삭제하시겠습니까?** {emoji.WARNING}"
+    delete_complete_msg = f"{emoji.CROSS_MARK_BUTTON} ** 유저 정보가 성공적으로 삭제되었습니다.**"
+    # HELP_MSG = [
+    #     ".",
+    #     "**Google Drive Uploader**\n__I can upload files from direct link or Telegram Files to your Google Drive. All i need is to authenticate me to your Google Drive Account and send a direct download link or Telegram File.__\n\nI have more features... ! Wanna know about it ? Just walkthrough this tutorial and read the messages carefully.",
+    #
+    #     f"**Authenticating Google Drive**\n__Send the /{BotCommands.Authorize[0]} commmand and you will receive a URL, visit URL and follow the steps and send the received code here. Use /{BotCommands.Revoke[0]} to revoke your currently logged Google Drive Account.__\n\n**Note: I will not listen to any command or message (except /{BotCommands.Authorize[0]} command) until you authorize me.\nSo, Authorization is mandatory !**",
+    #
+    #     f"**Direct Links**\n__Send me a direct download link for a file and i will download it on my server and Upload it to your Google Drive Account. You can rename files before uploading to GDrive Account. Just send me the URL and new filename separated by ' | '.__\n\n**__Examples:__**\n```https://example.com/AFileWithDirectDownloadLink.mkv | New FileName.mkv```\n\n**Telegram Files**\n__To Upload telegram files in your Google drive Account just send me the file and i will download and upload it to your Google Drive Account. Note: Telegram Files Downloading are slow. it may take longer for big files.__\n\n**YouTube-DL Support**\n__Download files via youtube-dl.\nUse /{BotCommands.YtDl[0]} (YouTube Link/YouTube-DL Supported site link)__",
+    #
+    #     f"**Custom Folder for Upload**\n__Want to upload in custom folder or in__ **TeamDrive** __ ?\nUse /{BotCommands.SetFolder[0]} (Folder URL) to set custom upload folder.\nAll the files are uploaded in the custom folder you provide.__",
+    #
+    #     f"**Delete Google Drive Files**\n__Delete google drive files. Use /{BotCommands.Delete[0]} (File/Folder URL) to delete file or reply /{BotCommands.Delete[0]} to bot message.\nYou can also empty trash files use /{BotCommands.EmptyTrash[0]}\nNote: Files are deleted permanently. This process cannot be undone.\n\n**Copy Google Drive Files**\n__Yes, Clone or Copy Google Drive Files.\n__Use /{BotCommands.Clone[0]} (File id / Folder id or URL) to copy Google Drive Files in your Google Drive Account.__",
+    #
+    #     "**Rules & Precautions**\n__1. Don't copy BIG Google Drive Files/Folders. It may hang the bot and your files maybe damaged.\n2. Send One request at a time unless bot will stop all processes.\n3. Don't send slow links @transload it first.\n4. Don't misuse, overload or abuse this free service.__",
+    #
+    #     # Dont remove this ↓ if you respect developer.
+    #     "**Developed by @viperadnan**"
+    # ]
 
     RATE_LIMIT_EXCEEDED_MESSAGE = "❗ **Rate Limit Exceeded.**\n__User rate limit exceeded try after 24 hours.__"
 
@@ -36,7 +40,7 @@ class Messages:
 
     COPIED_SUCCESSFULLY = "✅ **Copied successfully.**\n[{}]({}) __({})__"
 
-    NOT_AUTH = f"🔑 **You have not authenticated me to upload to any account.**\n__Send /{BotCommands.Authorize[0]} to authenticate.__"
+    # NOT_AUTH = f"🔑 **You have not authenticated me to upload to any account.**\n__Send /{BotCommands.Authorize[0]} to authenticate.__"
 
     DOWNLOADED_SUCCESSFULLY = "📤 **Uploading File...**\n**Filename:** ```{}```\n**Size:** ```{}```"
 
@@ -48,7 +52,7 @@ class Messages:
 
     ALREADY_AUTH = "🔒 **Already authorized your Google Drive Account.**\n__Use /revoke to revoke the current account.__\n__Send me a direct link or File to Upload on Google Drive__"
 
-    FLOW_IS_NONE = f"❗ **Invalid Code**\n__Run {BotCommands.Authorize[0]} first.__"
+    # FLOW_IS_NONE = f"❗ **Invalid Code**\n__Run {BotCommands.Authorize[0]} first.__"
 
     AUTH_SUCCESSFULLY = '🔐 **Authorized Google Drive account Successfully.**'
 
@@ -60,11 +64,11 @@ class Messages:
 
     PARENT_SET_SUCCESS = '🆔✅ **Custom Folder link set successfully.**\n__Your custom folder id - {}\nUse__ ```/{} clear``` __to clear it.__'
 
-    PARENT_CLEAR_SUCCESS = f'🆔🚮 **Custom Folder ID Cleared Successfuly.**\n__Use__ ```/{BotCommands.SetFolder[0]} (Folder Link)``` __to set it back__.'
+    # PARENT_CLEAR_SUCCESS = f'🆔🚮 **Custom Folder ID Cleared Successfuly.**\n__Use__ ```/{BotCommands.SetFolder[0]} (Folder Link)``` __to set it back__.'
 
     CURRENT_PARENT = "🆔 **Your Current Custom Folder ID - {}**\n__Use__ ```/{} (Folder link)``` __to change it.__"
 
-    REVOKED = f"🔓 **Revoked current logged account successfully.**\n__Use /{BotCommands.Authorize[0]} to authenticate again and use this bot.__"
+    # REVOKED = f"🔓 **Revoked current logged account successfully.**\n__Use /{BotCommands.Authorize[0]} to authenticate again and use this bot.__"
 
     NOT_FOLDER_LINK = "❗ **Invalid folder link.**\n__The link you send its not belong to a folder.__"
 
