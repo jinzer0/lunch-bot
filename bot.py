@@ -202,6 +202,7 @@ def check_school(clinet: Client, message: Message):
     if result is None:
         return
     insert_user(message, result)
+    message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **학교 정보가 저장 되었습니다.**")
 
 
 @app.on_message(filters=filters.command(["launch"]))

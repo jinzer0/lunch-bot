@@ -1,15 +1,17 @@
 from pyrogram import emoji
+
+
 class Messages:
     START_MSG = "**Hi there {}.**\n__I'm Google Drive Uploader Bot.You can use me to upload any file / video to Google Drive from direct link or Telegram Files.__\n__You can know more from /help.__"
     start_msg = "**안녕한가 👨🏼‍🎓학생들이여... {}.**\n지정된 시간에 **급식**을 알려주는 급식봇이라고 한다...\n/help 명령어로 사용 방법을 배워보거라..."
-    help_msg = """/start - ✅ **쓸모 없는 명령어**\n
+    help_msg = f"""/start - ✅ **쓸모 없는 명령어**\n
 /help - ℹ️ **현재 이 메세지 보기**\n
 /set - ⚙️ **급식 정보를 받으려는 학교 설정** 예) /set 한국중학교\n
-/launch - ⏰ **급식 알림 시작**\n
-/stop - ⛔ **급식 알림 중지**"""
+/launch - {emoji.BELL} **급식 알림 시작**\n
+/stop - {emoji.BELL_WITH_SLASH} **급식 알림 중지**"""
     set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 설정하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예)/set 대한고등학교,/set 민국중학교**"
-    launch_msg = "⏰ **알림이 켜졌노라..**.\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n알람 중지는 **/stop**를 입력하거라~"
-    stop_msg ="⛔ **알림이 중지되었노라...**\n알람을 다시 켠다면 **/launch**를 입력하거라~"
+    launch_msg = f"{emoji.BELL} **알림이 켜졌노라..**.\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n알람 중지는 **/stop**를 입력하거라~"
+    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...**\n알람을 다시 켠다면 **/launch**를 입력하거라~"
     alarm_msg = "🍽️🥣 **오늘 {}** 🍽️🥣\n-----\n**{}**\n-----\n✅ **칼로리 :** ```{}```"
     alarm_error_msg = f"{emoji.CROSS_MARK_BUTTON} **오늘은 급식이 없습니다!**"
     delete_msg = f"{emoji.WARNING} **정말로 유저 정보를 삭제하시겠습니까?** {emoji.WARNING}"
