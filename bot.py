@@ -1,3 +1,5 @@
+import random
+
 from pyrogram import Client, filters, emoji
 from config import Messages
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, \
@@ -253,7 +255,7 @@ def delete(client: Client, callback: CallbackQuery):
             callback.message.delete()
 
 
-scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler(timezone="Asia/Tokyo")
 scheduler.start()
 scheduler.add_job(fetch_info, "cron", second=0, minute=0, hour=3)
 scheduler.add_job(alarm, "cron", second=0, minute=55, hour=6, args=[1])
