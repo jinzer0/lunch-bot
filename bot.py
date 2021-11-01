@@ -237,7 +237,6 @@ def delete_callback(client: Client, message: Message):
     ]))
 
 
-
 @app.on_callback_query()
 def delete(client: Client, callback: CallbackQuery):
     school_db = sqlite3.connect("highschool.db")
@@ -255,6 +254,42 @@ def delete(client: Client, callback: CallbackQuery):
         else:
             callback.message.delete()
 
+
+admin = [1899480287, 1516844869, 1751382310, 1707277448]
+
+
+@app.on_message(filters=(filters.command("status") & filters.chat(admin)))
+def status_admin(client: Client, message: Message):
+    school_db = sqlite3.connect("highschool.db")
+    cur = school_db.cursor()
+
+    sql = "SELECT * FROM user"
+    cur.execute(sql)
+    result_user = cur.fetchall()
+    user_count = len(result_user)
+
+    sql = "SELECT * FROM user WHERE alarm = 'true'"
+    cur.execute(sql)
+    result_alarm = cur.fetchall()
+    alarm_count = len(result_alarm)
+
+    sql = "SELECT * FROM cafeteria WHERE meal_code = 1"
+    cur.execute(sql)
+    result_meal_1= cur.fetchall()
+    meal_1_count = len(result_meal_1)
+
+    sql = "SELECT * FROM cafeteria WHERE meal_code = 2"
+    cur.execute(sql)
+    result_meal_2= cur.fetchall()
+    meal_2_count = len(result_meal_2)
+
+    sql = "SELECT * FROM cafeteria WHERE meal_code = 3"
+    cur.execute(sql)
+    result_meal_3= cur.fetchall()
+    meal_3_count = len(result_meal_3)
+
+    message.delete()
+    app.send_message(message.chat.id, text=Messages.status_msg.format(user_count, alarm_count, meal_1_count, meal_2_count, meal_3_count))
 
 scheduler = BackgroundScheduler(timezone="Asia/Tokyo")
 scheduler.start()

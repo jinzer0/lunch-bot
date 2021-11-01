@@ -63,7 +63,7 @@ def fetch_info():  # get information from NEIS Service
     school = 7010170
     education = "B10"
 
-    school_db = sqlite3.connect("../highschool.db")
+    school_db = sqlite3.connect("./highschool.db")
     cur = school_db.cursor()
     sql = "SELECT school_code, edu_tag FROM highschool"
     cur.execute(sql)
@@ -111,8 +111,6 @@ def fetch_info():  # get information from NEIS Service
         sql = "INSERT INTO cafeteria values (?, ?, ?, ?,?)"
         cur.execute(sql, (school, meal, calorie, meal_code, meal_tag))
         print(f"sql executed\n")
-    """CAL_INFO - 칼로리
-    ,DDISH_NM - 급식 ,MMEAL_SC_NM - 조중석식"""
     school_db.commit()
     time.sleep(3)
 
@@ -120,7 +118,7 @@ def fetch_info():  # get information from NEIS Service
     return print("Done")
 
 def alarm(meal_code: int):
-    school_db = sqlite3.connect("../highschool.db")
+    school_db = sqlite3.connect("./highschool.db")
     cur = school_db.cursor()
     sql_user = "SELECT user_id, school_code FROM user WHERE alarm = 'true'"
     cur.execute(sql_user)
@@ -141,4 +139,3 @@ def alarm(meal_code: int):
         meal_tag = result[2]
         # app.send_message(chat_id=int(user_id), text=Messages.alarm_msg.format(meal_tag, meal, calorie))
         time.sleep(0.1)
-alarm(2)

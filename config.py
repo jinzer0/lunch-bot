@@ -16,6 +16,7 @@ class Messages:
     alarm_error_msg = f"{emoji.CROSS_MARK_BUTTON} **오늘은 급식이 없습니다!**"
     delete_msg = f"{emoji.WARNING} **정말로 유저 정보를 삭제하시겠습니까?** {emoji.WARNING}"
     delete_complete_msg = f"{emoji.CROSS_MARK_BUTTON} ** 유저 정보가 성공적으로 삭제되었습니다.**"
+    status_msg = "🤖 **현재 유저, 봇 상황** 🤖\n👨 **총 유저 :** {} **명**\n🔔 **알람 활성화 유저 :** {} **명**\n🍽️ **급식 총 수(조, 중, 석식 순서) :** {}, {}, {} **개**"
     # HELP_MSG = [
     #     ".",
     #     "**Google Drive Uploader**\n__I can upload files from direct link or Telegram Files to your Google Drive. All i need is to authenticate me to your Google Drive Account and send a direct download link or Telegram File.__\n\nI have more features... ! Wanna know about it ? Just walkthrough this tutorial and read the messages carefully.",
