@@ -111,7 +111,6 @@ def fetch_info():  # get information from NEIS Service
         }
 
         url = target + urllib.parse.urlencode(parameter, doseq=True)
-        print(url)
 
         res = r.get(url)
         result: dict = res.json()
@@ -122,7 +121,6 @@ def fetch_info():  # get information from NEIS Service
         list_total_count = result.get("mealServiceDietInfo").__getitem__(0).get("head").__getitem__(0).get(
             "list_total_count")
 
-        print(f"Total meal {list_total_count}")
         for count in range(list_total_count):
             calorie = result.get("mealServiceDietInfo").__getitem__(1).get("row").__getitem__(count).get("CAL_INFO")
             meal = result.get("mealServiceDietInfo").__getitem__(1).get("row").__getitem__(count).get("DDISH_NM")
@@ -152,6 +150,7 @@ def alarm(meal_code: int):
         cur.execute(sql, (school_code, meal_code))
         result = cur.fetchone()
         if result is None:
+            print(f"Sent Alarm - {user_id}")
             app.send_message(chat_id=int(user_id), text=Messages.alarm_error_msg)
             time.sleep(0.1)
             continue
@@ -160,6 +159,7 @@ def alarm(meal_code: int):
         calorie = result[1]
         meal_tag = result[2]
         app.send_message(chat_id=int(user_id), text=Messages.alarm_msg.format(meal_tag, meal, calorie))
+        print(f"Sent Alarm - {user_id}")
         time.sleep(0.1)
 
 
@@ -242,7 +242,6 @@ def delete(client: Client, callback: CallbackQuery):
     if callback.data.split("_")[0] == "delete":
         if callback.data.split("_")[1] == "true":
             sql = "DELETE FROM user WHERE user_id = ?"
-            print(callback.from_user.id)
             user_id = callback.from_user.id
             cur.execute(sql, [user_id])
             school_db.commit()
