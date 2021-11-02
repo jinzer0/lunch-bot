@@ -12,8 +12,8 @@ class Messages:
 /delete - {emoji.PROHIBITED} **유저 정보 삭제**
 """
     set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 등록하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예)/set 대한고등학교,/set 민국중학교**"
-    launch_msg = f"{emoji.BELL} **알림이 켜졌노라..**.\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n알림 일시 중지는 **/stop**를 입력하거라~"
-    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...**\n알림을 다시 켠다면 **/launch**를 입력하거라~"
+    launch_msg = f"{emoji.BELL} **알림이 켜졌노라...**\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n**알림 일시 중지는** /stop**를 입력하거라~**"
+    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...\n알림을 다시 켠다면** /launch**를 입력하거라~**"
     alarm_msg = "🍽️🥣 **오늘 {}** 🍽️🥣\n-----\n**{}**\n-----\n✅ **칼로리 :** ```{}```"
     alarm_error_msg = f"{emoji.CROSS_MARK_BUTTON} **오늘은 급식이 없습니다!**"
     delete_msg = f"{emoji.WARNING} **정말로 유저 정보를 삭제하시겠습니까?** {emoji.WARNING}"

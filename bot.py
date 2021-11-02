@@ -264,7 +264,7 @@ def stop(client: Client, message: Message):
             school_db.close()
             message.reply_text(text=Messages.stop_msg, quote=True)
         else:
-            message.reply_text(text=f"{emoji.BELL_WITH_SLASH} **이미 알림이 꺼진 상태입니다!**", quote=True)
+            message.reply_text(text=f"{emoji.BELL_WITH_SLASH} **이미 알림이 꺼져 있습니다!**", quote=True)
     else:
         message.reply_text(text=f"{emoji.BELL_WITH_SLASH} **유저 정보가 없습니다!** /set **명령어로 학교를 먼저 등록하세요!**", quote=True)
 
