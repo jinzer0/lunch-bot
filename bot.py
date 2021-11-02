@@ -145,7 +145,7 @@ def fetch_info():  # get information from NEIS Service
             print(f"sql executed\n")
 
         school_db.commit()
-        time.sleep(1.5)
+        time.sleep(2)
 
     school_db.close()
     return
