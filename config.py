@@ -11,16 +11,16 @@ class Messages:
 /stop - {emoji.BELL_WITH_SLASH} **급식 알림 끄기**
 /delete - {emoji.PROHIBITED} **유저 정보 삭제**
 """
-    set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 등록하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예)/set 대한고등학교,/set 민국중학교**"
-    launch_msg = f"{emoji.BELL} **알림이 켜졌노라...**\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n**알림 일시 중지는** /stop**를 입력하거라~**"
-    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...\n알림을 다시 켠다면** /launch**를 입력하거라~**"
+    set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 등록하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예) /set 대한고등학교, /set 민국중학교**"
+    launch_msg = f"{emoji.BELL} **알림이 켜졌노라...**\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n**알림 일시 중지는** /stop **를 입력하거라~**"
+    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...\n알림을 다시 켠다면** /launch **를 입력하거라~**"
     alarm_msg = "🍽️🥣 **오늘 {}** 🍽️🥣\n-----\n**{}**\n-----\n✅ **칼로리 :** ```{}```"
     alarm_error_msg = f"{emoji.CROSS_MARK_BUTTON} **오늘은 급식이 없습니다!**"
     delete_msg = f"{emoji.WARNING} **정말로 유저 정보를 삭제하시겠습니까?** {emoji.WARNING}"
     delete_complete_msg = f"{emoji.CROSS_MARK_BUTTON} ** 유저 정보가 성공적으로 삭제되었습니다.**"
     status_msg = "🤖 **현재 유저, 봇 상황** 🤖\n👨 **총 유저 :** ```{}``` **명**\n🔔 **알림 활성화 유저 :** ```{}``` **명**\n🍽️ **급식 총 수(조, 중, 석식 순서) :** ```{}, {}, {}``` **개**"
     help_msg_2 = f"""🍽️🥣 **급식 알림 받는 방법** 🍽️🥣
-{emoji.KEYCAP_DIGIT_ONE} /set ***명령어로 학교를 등록한다.**
+{emoji.KEYCAP_DIGIT_ONE} /set **명령어로 학교를 등록한다.**
 {emoji.KEYCAP_DIGIT_TWO} **급식 시간전 알림을 기다린다. 끝~**
 {emoji.KEYCAP_DIGIT_THREE} /stop **명령어로 알림을 일시 중지하거나,** /launch **명령어로 일시 중지한 알림을 다시 켤 수 있다.**
 {emoji.KEYCAP_DIGIT_FOUR} /delete **명령어로 유저 정보를 삭제한다. 학교를 바꾸거나 더 이상 봇을 사용하지 않을 때 이 명령어를 입력하도록!**
