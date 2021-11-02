@@ -14,6 +14,7 @@ api_id = 6151092
 api_hash = "fea769c5675fe6e0bc1e7f6ea7ee76e9"
 token = "1890496399:AAGVRWGm3q0FnysKMBSzr9AvwUI4OguwPfM"
 app = Client("lunch", api_id, api_hash, bot_token=token, parse_mode="markdown")
+admin = [1899480287, 1516844869, 1751382310, 1707277448]
 
 """
 현재 해야 할 코드 리팩토링
@@ -174,9 +175,16 @@ def alarm(meal_code: int):
         time.sleep(0.1)
 
 
-@app.on_message(filters=filters.command(["help", "start"]))
+@app.on_message(filters=filters.command("start"))
 def help(client: Client, message: Message):
-    app.send_message(chat_id=message.chat.id, text=Messages.help_msg, parse_mode="markdown")
+    app.send_message(chat_id=message.chat.id, text=Messages.start_msg.format(message.from_user.mention),
+                     parse_mode="markdown")
+
+
+@app.on_message(filters=filters.command("help"))
+def help(client: Client, message: Message):
+    message.reply_text(text=Messages.help_msg)
+    message.reply_text(text=Messages.help_msg_2)
 
 
 @app.on_message(filters=filters.command("set"))
@@ -246,7 +254,7 @@ def delete_callback(client: Client, message: Message):
     ]))
 
 
-@app.on_callback_query()
+@app.on_callback_query(group=0)
 def delete(client: Client, callback: CallbackQuery):
     school_db = sqlite3.connect("highschool.db")
     cur = school_db.cursor()
@@ -262,9 +270,6 @@ def delete(client: Client, callback: CallbackQuery):
 
         else:
             callback.message.delete()
-
-
-admin = [1899480287, 1516844869, 1751382310, 1707277448]
 
 
 @app.on_message(filters=(filters.command("status") & filters.chat(admin)))
@@ -284,21 +289,23 @@ def status_admin(client: Client, message: Message):
 
     sql = "SELECT * FROM cafeteria WHERE meal_code = 1"
     cur.execute(sql)
-    result_meal_1= cur.fetchall()
+    result_meal_1 = cur.fetchall()
     meal_1_count = len(result_meal_1)
 
     sql = "SELECT * FROM cafeteria WHERE meal_code = 2"
     cur.execute(sql)
-    result_meal_2= cur.fetchall()
+    result_meal_2 = cur.fetchall()
     meal_2_count = len(result_meal_2)
 
     sql = "SELECT * FROM cafeteria WHERE meal_code = 3"
     cur.execute(sql)
-    result_meal_3= cur.fetchall()
+    result_meal_3 = cur.fetchall()
     meal_3_count = len(result_meal_3)
 
     message.delete()
-    app.send_message(message.chat.id, text=Messages.status_msg.format(user_count, alarm_count, meal_1_count, meal_2_count, meal_3_count))
+    app.send_message(message.chat.id,
+                     text=Messages.status_msg.format(user_count, alarm_count, meal_1_count, meal_2_count, meal_3_count))
+
 
 scheduler = BackgroundScheduler(timezone="Asia/Tokyo")
 scheduler.start()

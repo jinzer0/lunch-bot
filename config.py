@@ -3,20 +3,28 @@ from pyrogram import emoji
 
 class Messages:
     START_MSG = "**Hi there {}.**\n__I'm Google Drive Uploader Bot.You can use me to upload any file / video to Google Drive from direct link or Telegram Files.__\n__You can know more from /help.__"
-    start_msg = "**안녕한가 👨🏼‍🎓학생들이여... {}.**\n지정된 시간에 **급식**을 알려주는 급식봇이라고 한다...\n/help 명령어로 사용 방법을 배워보거라..."
-    help_msg = f"""/start - ✅ **쓸모 없는 명령어**\n
-/help - ℹ️ **현재 이 메세지 보기**\n
-/set - ⚙️ **급식 정보를 받으려는 학교 설정** 예) /set 한국중학교\n
-/launch - {emoji.BELL} **급식 알림 시작**\n
-/stop - {emoji.BELL_WITH_SLASH} **급식 알림 중지**"""
+    start_msg = "**안녕한가 👨🏼‍🎓 {} 학생...**\n지정된 시간에 **급식**을 알려주는 **급식봇**이라고 한다...\n/help 명령어로 사용 방법을 배워보거라..."
+    help_msg = f"""/start - ✅ **쓸모 없는 명령어**
+/help - ℹ️ **현재 이 메세지 보기**
+/set - ⚙️ **급식 정보를 받으려는 학교 설정** 예) /set 한국중학교
+/launch - {emoji.BELL} **급식 알림 켜기**
+/stop - {emoji.BELL_WITH_SLASH} **급식 알림 끄기**
+/delete - {emoji.PROHIBITED} **유저 정보 삭제**
+"""
     set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 설정하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예)/set 대한고등학교,/set 민국중학교**"
-    launch_msg = f"{emoji.BELL} **알림이 켜졌노라..**.\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n알람 중지는 **/stop**를 입력하거라~"
-    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...**\n알람을 다시 켠다면 **/launch**를 입력하거라~"
+    launch_msg = f"{emoji.BELL} **알림이 켜졌노라..**.\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n알림 중지는 **/stop**를 입력하거라~"
+    stop_msg = f"{emoji.BELL_WITH_SLASH} **알림이 중지되었노라...**\n알림을 다시 켠다면 **/launch**를 입력하거라~"
     alarm_msg = "🍽️🥣 **오늘 {}** 🍽️🥣\n-----\n**{}**\n-----\n✅ **칼로리 :** ```{}```"
     alarm_error_msg = f"{emoji.CROSS_MARK_BUTTON} **오늘은 급식이 없습니다!**"
     delete_msg = f"{emoji.WARNING} **정말로 유저 정보를 삭제하시겠습니까?** {emoji.WARNING}"
     delete_complete_msg = f"{emoji.CROSS_MARK_BUTTON} ** 유저 정보가 성공적으로 삭제되었습니다.**"
-    status_msg = "🤖 **현재 유저, 봇 상황** 🤖\n👨 **총 유저 :** ```{}``` **명**\n🔔 **알람 활성화 유저 :** ```{}``` **명**\n🍽️ **급식 총 수(조, 중, 석식 순서) :** ```{}, {}, {}``` **개**"
+    status_msg = "🤖 **현재 유저, 봇 상황** 🤖\n👨 **총 유저 :** ```{}``` **명**\n🔔 **알림 활성화 유저 :** ```{}``` **명**\n🍽️ **급식 총 수(조, 중, 석식 순서) :** ```{}, {}, {}``` **개**"
+    help_msg_2 = f"""🍽️🥣 **급식 알림 받는 방법** 🍽️🥣
+{emoji.KEYCAP_DIGIT_ONE} /set ***명령어로 학교 설정을 한다.**
+{emoji.KEYCAP_DIGIT_TWO} **급식 시간전 알림을 기다린다. 끝~**
+{emoji.KEYCAP_DIGIT_THREE} /stop **명령어로 알림을 일시 중지하거나,** /launch **명령어로 일시 중지한 알림을 다시 켤 수 있다.**
+{emoji.KEYCAP_DIGIT_FOUR} /delete **명령어로 유저 정보를 삭제한다. 학교를 바꾸거나 더 이상 봇을 사용하지 않을 때 이 명령어를 입력하도록!**
+"""
     # HELP_MSG = [
     #     ".",
     #     "**Google Drive Uploader**\n__I can upload files from direct link or Telegram Files to your Google Drive. All i need is to authenticate me to your Google Drive Account and send a direct download link or Telegram File.__\n\nI have more features... ! Wanna know about it ? Just walkthrough this tutorial and read the messages carefully.",
