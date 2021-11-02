@@ -1,5 +1,3 @@
-import random
-
 from pyrogram import Client, filters, emoji
 from config import Messages
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, \
@@ -183,8 +181,8 @@ def help(client: Client, message: Message):
 
 @app.on_message(filters=filters.command("help"))
 def help(client: Client, message: Message):
-    message.reply_text(text=Messages.help_msg)
-    message.reply_text(text=Messages.help_msg_2)
+    message.reply_text(text=Messages.help_msg, quote=True)
+    message.reply_text(text=Messages.help_msg_2, quote=True)
 
 
 @app.on_message(filters=filters.command("set"))
@@ -192,22 +190,30 @@ def start(client: Client, message: Message):
     if message.text == "/set":
         app.send_message(chat_id=message.chat.id, text=Messages.set_msg)
     else:
-        school_name = message.text.split()[-1]
-        result = search_school(school_name=school_name)
-        if result == False:
-            app.send_message(chat_id=message.chat.id,
-                             text=f"{emoji.CROSS_MARK_BUTTON} **학교 검색 결과**가 없습니다! **유효한 학교 이름**을 입력해주세요!")
-        elif len(result) == 1:
-            app.send_message(chat_id=message.chat.id, text=f"{emoji.CHECK_MARK_BUTTON} **알맞은 학교를 선택해주세요!**",
-                             reply_markup=ReplyKeyboardMarkup([[KeyboardButton(text=".school - " + result[0][2])]],
-                                                              one_time_keyboard=True, resize_keyboard=True))
+        school_db = sqlite3.connect("highschool.db")
+        cur = school_db.cursor()
+        sql = "SELECT * FROM user WHERE user_id = ?"
+        cur.execute(sql, [message.chat.id])
+
+        if cur.fetchone() is None:
+            school_name = message.text.split()[-1]
+            result = search_school(school_name=school_name)
+            if result == False:
+                app.send_message(chat_id=message.chat.id,
+                                 text=f"{emoji.CROSS_MARK_BUTTON} **학교 검색 결과**가 없습니다! **유효한 학교 이름**을 입력해주세요!")
+            elif len(result) == 1:
+                app.send_message(chat_id=message.chat.id, text=f"{emoji.INFORMATION} **알맞은 학교를 선택해주세요!**",
+                                 reply_markup=ReplyKeyboardMarkup([[KeyboardButton(text=".school - " + result[0][2])]],
+                                                                  one_time_keyboard=True, resize_keyboard=True))
+            else:
+                keyboards = list()
+                for school in result:
+                    keyboards.append([KeyboardButton(text=".school - " + school[2])])
+                app.send_message(chat_id=message.chat.id, text=f"{emoji.INFORMATION} **알맞은 학교를 선택해주세요!**",
+                                 reply_markup=ReplyKeyboardMarkup(keyboard=keyboards, one_time_keyboard=True,
+                                                                  resize_keyboard=True))
         else:
-            keyboards = list()
-            for school in result:
-                keyboards.append([KeyboardButton(text=".school - " + school[2])])
-            app.send_message(chat_id=message.chat.id, text=f"{emoji.CHECK_MARK_BUTTON} **알맞은 학교를 선택해주세요!**",
-                             reply_markup=ReplyKeyboardMarkup(keyboard=keyboards, one_time_keyboard=True,
-                                                              resize_keyboard=True))
+            message.reply_text(f"{emoji.MAN_STUDENT} **이미 등록된 유저입니다!** /delete **명령어로 정보를 삭제하고 다시 등록하세요.**", quote=True)
 
 
 @app.on_message(filters=filters.command("school", prefixes="."))
@@ -219,39 +225,65 @@ def check_school(clinet: Client, message: Message):
     if result is None:
         return
     insert_user(message, result)
-    message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **학교 정보가 저장 되었습니다.**")
+    message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **학교 정보가 저장 되었습니다.**", quote=True)
+    message.reply_text(f"{emoji.BELL} **알림이 켜졌습니다. 알림을 일시 중지 하려면** /stop **명령어를 입력하세요.**", quote=True)
 
 
 @app.on_message(filters=filters.command(["launch"]))
 def launch(client: Client, message: Message):
     school_db = sqlite3.connect("highschool.db")
     cur = school_db.cursor()
-    sql = "UPDATE user SET alarm = ? WHERE user_id = ?"
-    cur.execute(sql, ("true", message.chat.id))
-    school_db.commit()
-    school_db.close()
-    app.send_message(chat_id=message.chat.id, text=Messages.launch_msg)
+    sql = "SELECT user_id, alarm FROM user WHERE user_id = ?"
+    cur.execute(sql, [message.chat.id])
+    result = cur.fetchone()
+    if result is not None:
+        if result[1] =="false":
+            sql = "UPDATE user SET alarm = ? WHERE user_id = ?"
+            cur.execute(sql, ("true", message.chat.id))
+            school_db.commit()
+            school_db.close()
+            message.reply_text(text=Messages.launch_msg, quote=True)
+        else:
+            message.reply_text(text=f"{emoji.BELL} **이미 알림이 켜져 있습니다!**", quote=True)
+    else:
+        message.reply_text(text=f"{emoji.BELL} **유저 정보가 없습니다!** /set **명령어로 학교를 먼저 등록하세요!**", quote=True)
 
 
 @app.on_message(filters=filters.command(["stop"]))
 def stop(client: Client, message: Message):
     school_db = sqlite3.connect("highschool.db")
     cur = school_db.cursor()
-    sql = "UPDATE user SET alarm = ? WHERE user_id = ?"
-    cur.execute(sql, ("false", message.chat.id))
-    school_db.commit()
-    school_db.close()
-    app.send_message(chat_id=message.chat.id, text=Messages.stop_msg)
+    sql = "SELECT user_id, alarm FROM user WHERE user_id = ?"
+    cur.execute(sql, [message.chat.id])
+    result = cur.fetchone()
+    if result is not None:
+        if result[1]=="true":
+            sql = "UPDATE user SET alarm = ? WHERE user_id = ?"
+            cur.execute(sql, ("false", message.chat.id))
+            school_db.commit()
+            school_db.close()
+            message.reply_text(text=Messages.stop_msg, quote=True)
+        else:
+            message.reply_text(text=f"{emoji.BELL_WITH_SLASH} **이미 알림이 꺼진 상태입니다!**", quote=True)
+    else:
+        message.reply_text(text=f"{emoji.BELL_WITH_SLASH} **유저 정보가 없습니다!** /set **명령어로 학교를 먼저 등록하세요!**", quote=True)
 
 
 @app.on_message(filters=filters.command("delete"))
 def delete_callback(client: Client, message: Message):
     message.delete()
-    app.send_message(message.chat.id, text=Messages.delete_msg, reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text="아니요, 전혀요.", callback_data="delete_false")],
-        [InlineKeyboardButton(text="아니요.", callback_data="delete_false")],
-        [InlineKeyboardButton(text="네. 삭제할게요.", callback_data="delete_true")]
-    ]))
+    school_db = sqlite3.connect("highschool.db")
+    cur = school_db.cursor()
+    sql = "SELECT * FROM user WHERE user_id = ?"
+    cur.execute(sql, [message.chat.id])
+    if cur.fetchone() is not None:
+        app.send_message(message.chat.id, text=Messages.delete_msg, reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton(text="아니요, 전혀요.", callback_data="delete_false")],
+            [InlineKeyboardButton(text="아니요.", callback_data="delete_false")],
+            [InlineKeyboardButton(text="네. 삭제할게요.", callback_data="delete_true")]
+        ]))
+    else:
+        message.reply_text(text=f"{emoji.MAN_STUDENT} **이미 유저 정보가 없습니다!**")
 
 
 @app.on_callback_query(group=0)
