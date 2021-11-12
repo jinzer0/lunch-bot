@@ -1,7 +1,7 @@
 from pyrogram import Client, filters, emoji
 from config import Messages
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, \
-    CallbackQuery
+    CallbackQuery, ReplyKeyboardRemove
 import time, sqlite3, datetime, urllib
 import requests as r
 import urllib.parse
@@ -227,7 +227,7 @@ def check_school(clinet: Client, message: Message):
     if result is None:
         return
     insert_user(message, result)
-    message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **학교 정보가 저장 되었습니다.**", quote=True)
+    message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **학교 정보가 저장 되었습니다.**", quote=True, reply_markup=ReplyKeyboardRemove())
     message.reply_text(f"{emoji.BELL} **알림이 켜졌습니다. 알림을 일시 중지 하려면** /stop **명령어를 입력하세요.**", quote=True)
 
 
