@@ -2,3 +2,6 @@
 /lunch.session-journal
 /__pycache/
 /highschool.db
+.DS_Store
+__pycache__/
+/source/.DS_Store
