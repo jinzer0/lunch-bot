@@ -4,12 +4,12 @@ import urllib.parse
 import requests as r
 import datetime
 from errors import WeekendError
-
+import ssl
 
 def fetch_info():  # get information from NEIS Service
     school_db = sqlite3.connect("highschool.db")
     cur = school_db.cursor()
-
+    context = ssl._create_unverified_context()
     target = "https://open.neis.go.kr/hub/mealServiceDietInfo?"
     apikey = "3157754f46dc4aafbc8f52dc0f257b77"
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'

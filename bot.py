@@ -341,6 +341,12 @@ def status_admin(client: Client, message: Message):
                      text=Messages.status_msg.format(user_count, alarm_count, meal_1_count, meal_2_count, meal_3_count))
 
 
+@app.on_message(filters=filters.command("fetch"))
+def fetch(client: Client, message: Message):
+    msg = app.send_message(chat_id=message.chat.id, text=f"{emoji.BOWL_WITH_SPOON} **급식 정보 갱신 중...**")
+    fetch_info()
+    msg.edit(f"{emoji.CHECK_MARK_BUTTON}**급식 정보를 성공적으로 갱신했습니다!**\n")
+
 scheduler = BackgroundScheduler(timezone="Asia/Tokyo")
 scheduler.start()
 scheduler.add_job(fetch_info, "cron", second=0, minute=0, hour=3)
