@@ -161,6 +161,11 @@ def alarm(meal_code: int):
         sql = "SELECT meal, calorie, meal_tag FROM cafeteria WHERE school_code = ? and meal_code = ?"
         cur.execute(sql, (school_code, meal_code))
         result = cur.fetchone()
+        user = app.get_users(user_ids=user_id)
+        if user.is_deleted:
+            print(f"Deleted user - {user_id}")
+            continue
+
         if result is None:
             print(f"Sent Alarm - {user_id}")
             app.send_message(chat_id=int(user_id), text=Messages.alarm_error_msg)
