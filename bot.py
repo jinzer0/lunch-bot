@@ -311,7 +311,7 @@ def delete(client: Client, callback: CallbackQuery):
             callback.message.delete()
 
 
-@app.on_message(filters=(filters.command("status") & filters.chat(admin)))
+@app.on_message(filters=(filters.command("st") & filters.chat(admin)))
 def status_admin(client: Client, message: Message):
     school_db = sqlite3.connect("highschool.db")
     cur = school_db.cursor()
