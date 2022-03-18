@@ -1,3 +1,5 @@
+import pprint
+
 from pyrogram import Client, filters, emoji
 from config import Messages
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, \
@@ -174,7 +176,7 @@ def alarm(meal_code: int):
 
         meal: str = result[0].replace("<br/>", "\n")
         calorie = result[1]
-        meal_tag = result[2]
+        meal_tag = result[4]
         app.send_message(chat_id=int(user_id), text=Messages.alarm_msg.format(meal_tag, meal, calorie))
         print(f"Sent Alarm - {user_id}")
         time.sleep(0.1)
@@ -346,11 +348,38 @@ def status_admin(client: Client, message: Message):
                      text=Messages.status_msg.format(user_count, alarm_count, meal_1_count, meal_2_count, meal_3_count))
 
 
-@app.on_message(filters=filters.command("fetch"))
+@app.on_message(filters=filters.command("fetch") & filters.chat(admin))
 def fetch(client: Client, message: Message):
     msg = app.send_message(chat_id=message.chat.id, text=f"{emoji.BOWL_WITH_SPOON} **급식 정보 갱신 중...**")
     fetch_info()
     msg.edit(f"{emoji.CHECK_MARK_BUTTON}**급식 정보를 성공적으로 갱신했습니다!**\n")
+
+@app.on_message(filters=filters.regex("오늘 급식"))
+def today_meal(client: Client, message: Message):
+    user_id = message.chat.id
+
+    school_db = sqlite3.connect("highschool.db")
+    cur = school_db.cursor()
+    sql = "select school_code FROM user WHERE user_id = ?"
+    cur.execute(sql, [user_id])
+
+
+    school_code = cur.fetchone()[0]
+    print(f"{user_id}")
+    print(f"{school_code}")
+
+    sql = "select * FROM cafeteria WHERE school_code = ?"
+    cur.execute(sql, [school_code])
+
+    meal_all = cur.fetchall()
+    pprint.pprint(meal_all)
+    for result in meal_all:
+        meal: str = result[1].replace("<br/>", "\n")
+        calorie = result[2]
+        meal_tag = result[4]
+        app.send_message(chat_id=int(user_id), text=Messages.alarm_msg.format(meal_tag, meal, calorie))
+        time.sleep(0.3)
+
 
 scheduler = BackgroundScheduler(timezone="Asia/Tokyo")
 scheduler.start()
