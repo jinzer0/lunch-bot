@@ -354,7 +354,7 @@ def fetch(client: Client, message: Message):
     fetch_info()
     msg.edit(f"{emoji.CHECK_MARK_BUTTON}**급식 정보를 성공적으로 갱신했습니다!**\n")
 
-@app.on_message(filters=filters.regex("오늘 급식"))
+@app.on_message(filters=filters.command("today"))
 def today_meal(client: Client, message: Message):
     user_id = message.chat.id
 

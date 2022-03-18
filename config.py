@@ -10,6 +10,7 @@ class Messages:
 /launch - {emoji.BELL} **급식 알림 켜기**
 /stop - {emoji.BELL_WITH_SLASH} **급식 알림 끄기**
 /delete - {emoji.PROHIBITED} **유저 정보 삭제**
+/today - {emoji.POT_OF_FOOD} **오늘 급식 한 번에 보기**
 """
     set_msg = "⚙️ **급식 정보**를 받으려는 **학교**를 등록하겠노라...\n예시를 보고 **정확히** 입력하거라...\n**예) /set 대한고등학교, /set 민국중학교**"
     launch_msg = f"{emoji.BELL} **알림이 켜졌노라...**\n앞으로 **조/중/석식(있는 경우만)**을 알려주겠노라...\n**알림 일시 중지는** /stop **를 입력하거라~**"
