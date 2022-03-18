@@ -17,11 +17,11 @@ admin = [1899480287, 1516844869, 1751382310, 1707277448]
 """
 현재 해야 할 코드 리팩토링
 1. 유저 table 생성 및 db 저장 - done
-2. 명령어 세팅 (학교 설정, 시간 설정#필요없을 수 있음, 도움말help, start, 알람시작, 알람중지) - 학교 설정, start, help done
-3. 명언 보내기 기능
+2. 명령어 세팅 (학교 설정, 시간 설정#필요없을 수 있음, 도움말help, start, 알람시작, 알람중지) - 학교 설정, start, help - done
+3. 명언 보내기 기능 - doing...
 4. NEIS API fetch - done
-5. 지정된 시간에 보내기
-6. user table - alarm column 추가하여 true일시 알람 전송, false일시 비전송. 명령어로 true, false update하기
+5. 지정된 시간에 보내기 - done
+6. user table - alarm column 추가하여 true일시 알람 전송, false일시 비전송. 명령어로 true, false update하기 - done
 """
 
 
@@ -244,7 +244,7 @@ def launch(client: Client, message: Message):
     cur.execute(sql, [message.chat.id])
     result = cur.fetchone()
     if result is not None:
-        if result[1] =="false":
+        if result[1] == "false":
             sql = "UPDATE user SET alarm = ? WHERE user_id = ?"
             cur.execute(sql, ("true", message.chat.id))
             school_db.commit()
@@ -264,7 +264,7 @@ def stop(client: Client, message: Message):
     cur.execute(sql, [message.chat.id])
     result = cur.fetchone()
     if result is not None:
-        if result[1]=="true":
+        if result[1] == "true":
             sql = "UPDATE user SET alarm = ? WHERE user_id = ?"
             cur.execute(sql, ("false", message.chat.id))
             school_db.commit()
@@ -352,6 +352,7 @@ def fetch(client: Client, message: Message):
     fetch_info()
     msg.edit(f"{emoji.CHECK_MARK_BUTTON}**급식 정보를 성공적으로 갱신했습니다!**\n")
 
+
 @app.on_message(filters=filters.command("today"))
 def today_meal(client: Client, message: Message):
     user_id = message.chat.id
@@ -360,7 +361,6 @@ def today_meal(client: Client, message: Message):
     cur = school_db.cursor()
     sql = "select school_code FROM user WHERE user_id = ?"
     cur.execute(sql, [user_id])
-
 
     school_code = cur.fetchone()[0]
 
@@ -376,11 +376,34 @@ def today_meal(client: Client, message: Message):
         time.sleep(0.3)
 
 
+advice_id = 1
+
+
+def send_advice():
+    global advice_id
+    res = r.get(f"https://api.adviceslip.com/advice/{advice_id}")
+    advice = res.json()["slip"]["advice"]
+
+    school_db = sqlite3.connect("highschool.db")
+    cur = school_db.cursor()
+    sql = "select user_id FROM user"
+    cur.execute(sql)
+    user_ids = cur.fetchall()  # fetchall은 리스트로 나옴, 예시 : [(1707277448,)]
+
+    for user in user_ids:
+        user = user[0]
+        app.send_message(chat_id=user, text=f"{emoji.THINKING_FACE}  **오늘의 명언** {emoji.THINKING_FACE}\n**{advice}**")
+        time.sleep(0.2)
+
+    advice_id += 1
+
+
 scheduler = BackgroundScheduler(timezone="Asia/Tokyo")
 scheduler.start()
 scheduler.add_job(fetch_info, "cron", second=0, minute=0, hour=3)
 scheduler.add_job(alarm, "cron", second=0, minute=55, hour=6, args=[1])
 scheduler.add_job(alarm, "cron", second=0, minute=55, hour=11, args=[2])
 scheduler.add_job(alarm, "cron", second=0, minute=25, hour=17, args=[3])
+scheduler.add_job(send_advice, "cron", second=0, minute=0, hour=17)
 
 app.run()
