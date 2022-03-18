@@ -1,5 +1,3 @@
-import pprint
-
 from pyrogram import Client, filters, emoji
 from config import Messages
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton, \
@@ -365,14 +363,11 @@ def today_meal(client: Client, message: Message):
 
 
     school_code = cur.fetchone()[0]
-    print(f"{user_id}")
-    print(f"{school_code}")
 
     sql = "select * FROM cafeteria WHERE school_code = ?"
     cur.execute(sql, [school_code])
 
     meal_all = cur.fetchall()
-    pprint.pprint(meal_all)
     for result in meal_all:
         meal: str = result[1].replace("<br/>", "\n")
         calorie = result[2]
