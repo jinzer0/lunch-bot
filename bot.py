@@ -390,9 +390,14 @@ def send_advice():
     cur.execute(sql)
     user_ids = cur.fetchall()  # fetchall은 리스트로 나옴, 예시 : [(1707277448,)]
 
-    for user in user_ids:
-        user = user[0]
-        app.send_message(chat_id=user, text=f"{emoji.THINKING_FACE}  **오늘의 명언** {emoji.THINKING_FACE}\n**{advice}**")
+    for user_id_list in user_ids:
+        user_id = user_id_list[0]
+        user = app.get_users(user_ids=user_id)
+        if user.is_deleted:
+            print(f"Deleted user - {user_id}")
+            continue
+
+        app.send_message(chat_id=user_id, text=f"{emoji.THINKING_FACE}  **오늘의 명언** {emoji.THINKING_FACE}\n**{advice}**")
         time.sleep(0.2)
 
     advice_id += 1
