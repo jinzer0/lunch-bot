@@ -174,7 +174,7 @@ def alarm(meal_code: int):
 
         meal: str = result[0].replace("<br/>", "\n")
         calorie = result[1]
-        meal_tag = result[4]
+        meal_tag = result[2]
         app.send_message(chat_id=int(user_id), text=Messages.alarm_msg.format(meal_tag, meal, calorie))
         print(f"Sent Alarm - {user_id}")
         time.sleep(0.1)
