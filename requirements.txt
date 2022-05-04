@@ -1,0 +1,5 @@
+aiohttp==3.7.4
+APScheduler==3.6.3
+Pyrogram @ git+https://github.com/pyrogram/pyrogram.git@a460d12a824ff61f1c96842b13f1fdd2ab0a7419
+TgCrypto==1.2.2
+urllib3==1.24.2
