@@ -5,3 +5,7 @@
 .DS_Store
 __pycache__/
 /source/.DS_Store
+.idea
+test
+temp.py
+/.env

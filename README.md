@@ -9,6 +9,12 @@ On terminal:
 `git clone https://github.com/jinzer0/lunch-bot.git`
 2. Install packages   
 `pip install -r requirements.txt`
+3. Create .env   
+```dotenv
+API_ID = your API_id
+API_HASH = "your API_hash"
+TOKEN = "your Bot Token"
+```
 
 # Run
 On terminal:   

@@ -7,21 +7,25 @@ import requests as r
 import urllib.parse
 from errors import WeekendError, NoInfoError
 from apscheduler.schedulers.background import BackgroundScheduler
+import os
+from dotenv import load_dotenv
 
-api_id = 6151092
-api_hash = "fea769c5675fe6e0bc1e7f6ea7ee76e9"
-token = "1890496399:AAGVRWGm3q0FnysKMBSzr9AvwUI4OguwPfM"
+load_dotenv()
+api_id = os.getenv("API_ID")
+api_hash = os.getenv("API_HASH")
+token = os.getenv("TOKEN")
+
 app = Client("lunch", api_id, api_hash, bot_token=token, parse_mode="markdown")
 admin = [1899480287, 1516844869, 1751382310, 1707277448]
 
 """
 현재 해야 할 코드 리팩토링
-1. 유저 table 생성 및 db 저장 - done
-2. 명령어 세팅 (학교 설정, 시간 설정#필요없을 수 있음, 도움말help, start, 알람시작, 알람중지) - 학교 설정, start, help - done
+1. 유저 table 생성 및 db 저장 - DONE
+2. 명령어 세팅 (학교 설정, 시간 설정#필요없을 수 있음, 도움말help, start, 알람시작, 알람중지) - 학교 설정, start, help - DONE
 3. 명언 보내기 기능 - doing...
-4. NEIS API fetch - done
-5. 지정된 시간에 보내기 - done
-6. user table - alarm column 추가하여 true일시 알람 전송, false일시 비전송. 명령어로 true, false update하기 - done
+4. NEIS API fetch - DONE
+5. 지정된 시간에 보내기 - DONE
+6. user table - alarm column 추가하여 true일시 알람 전송, false일시 비전송. 명령어로 true, false update하기 - DONE
 """
 
 

@@ -7,6 +7,7 @@ import urllib
 import urllib.parse
 import requests as r
 
+
 from errors import WeekendError
 
 """
